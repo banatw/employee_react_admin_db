@@ -1,6 +1,5 @@
-package com.example.employee_react_admin.employee;
+package com.example.employee_react_admin.job;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,8 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import com.example.employee_react_admin.model.FilterModel;
@@ -19,20 +16,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-
 @Service
-public class EmployeeDao {
-    private final EmployeeRepos repos;
+public class JobDao {
+    private final JobRepos repos;
 
-    public EmployeeDao(EmployeeRepos employeeRepos) {
+    public JobDao(JobRepos employeeRepos) {
         this.repos = employeeRepos;
     }
 
-    public Page<Employee> getList(int page,int size, Optional<String> sort,Optional<String> filter) throws JsonMappingException, JsonProcessingException {
+    public Page<Job> getList(int page,int size, Optional<String> sort,Optional<String> filter) throws JsonMappingException, JsonProcessingException {
         Pageable pageable = null;
         if(sort.isPresent() && filter.isPresent() ) {
             if(!sort.get().equals("{}")) {
@@ -69,11 +61,11 @@ public class EmployeeDao {
         // return repos.findAll(pageable);
     }
 
-    public void insert(Employee employee) {
+    public void insert(Job employee) {
         repos.save(employee);
     }
 
-    public void update(Employee employee) {
+    public void update(Job employee) {
         repos.save(employee);
     }
 
@@ -81,7 +73,7 @@ public class EmployeeDao {
         repos.deleteById(id);
     }
 
-    public Employee getOne(Long id) {
+    public Job getOne(Long id) {
         return repos.findById(id).get();
     }
 

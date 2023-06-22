@@ -1,4 +1,4 @@
-package com.example.employee_react_admin.employee;
+package com.example.employee_react_admin.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
