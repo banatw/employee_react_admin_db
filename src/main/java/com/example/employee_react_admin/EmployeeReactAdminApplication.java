@@ -14,11 +14,11 @@ public class EmployeeReactAdminApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EmployeeReactAdminApplication.class, args);
 	}
-	// @Bean
-	// public CommandLineRunner commandLineRunner(@Autowired FakerService service) {
-	// 	return (x)->{
-	// 		service.generate();
-	// 	};
-	// }
+	@Bean
+	public CommandLineRunner commandLineRunner(@Autowired FakerService service) {
+		return (x)->{
+			service.generate();
+		};
+	}
 
 }

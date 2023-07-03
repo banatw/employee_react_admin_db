@@ -1,6 +1,5 @@
 package com.example.employee_react_admin.employee;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,8 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import com.example.employee_react_admin.model.FilterModel;
@@ -19,24 +16,21 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-
 @Service
 public class EmployeeDao {
     private final EmployeeRepos repos;
 
-    public EmployeeDao(EmployeeRepos employeeRepos) {
+    private final ObjectMapper objectMapper;
+
+    public EmployeeDao(EmployeeRepos employeeRepos,ObjectMapper objMapper) {
         this.repos = employeeRepos;
+        this.objectMapper = objMapper;
     }
 
     public Page<Employee> getList(int page,int size, Optional<String> sort,Optional<String> filter) throws JsonMappingException, JsonProcessingException {
         Pageable pageable = null;
         if(sort.isPresent() && filter.isPresent() ) {
             if(!sort.get().equals("{}")) {
-                ObjectMapper objectMapper = new ObjectMapper();
                 List<FilterModel> listFilter = objectMapper.readValue(filter.get(), new TypeReference<List<FilterModel>>(){});
                 FilterModel sortModel = objectMapper.readValue(sort.get(), FilterModel.class);
                 pageable = PageRequest.of(page, size, Sort.by(Direction.fromString(sortModel.getValue()), sortModel.getColumn()));
