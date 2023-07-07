@@ -26,7 +26,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping(path = "/api/employee",method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
+@RequestMapping(path = "/api/employee",method = {RequestMethod.GET,RequestMethod.POST,
+    RequestMethod.PUT,RequestMethod.DELETE},produces = "application/json")
 @CrossOrigin(allowedHeaders = "*")
 public class EmployeeController {
     // @Autowired
@@ -72,7 +73,7 @@ public class EmployeeController {
         return ResponseEntity.ok().body(null);
     }
 
-    @GetMapping(value="/list")
+    @GetMapping("/list")
     public ResponseEntity<Page<Employee>> list(@RequestParam int page,@RequestParam int size,
        @RequestParam(name = "sort",required = false) Optional<String> sort,
        @RequestParam(name = "filter",required = false) Optional<String> filter) throws JsonMappingException, JsonProcessingException {
