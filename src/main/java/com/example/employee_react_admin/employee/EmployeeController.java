@@ -9,25 +9,17 @@ import com.example.employee_react_admin.job.Job;
 import com.example.employee_react_admin.job.JobDao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.Console;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
 
 
 
 @RestController
-@RequestMapping(path = "/api/employee",method = {RequestMethod.GET,RequestMethod.POST,
-    RequestMethod.PUT,RequestMethod.DELETE},produces = "application/json")
+@RequestMapping(path = "/employee",produces = "application/json")
 @CrossOrigin(allowedHeaders = "*")
 public class EmployeeController {
     // @Autowired
@@ -41,7 +33,7 @@ public class EmployeeController {
         this.jobDao = job;
     }
 
-    @PostMapping(value="")
+     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Employee> create(@RequestBody EmployeeDto empString) throws JsonMappingException, JsonProcessingException {
         // System.out.println("fdfdfd " + empString.getJobId());
         Employee employee = new Employee();
@@ -53,7 +45,7 @@ public class EmployeeController {
         return ResponseEntity.ok().body(employee);
     }
 
-    @PutMapping(value="/update")
+     @RequestMapping(method = RequestMethod.PATCH)
     public ResponseEntity<Employee> update(@RequestParam String id, @RequestBody EmployeeDto empString) throws JsonMappingException, JsonProcessingException {
         //TODO: process PUT request
         
@@ -66,21 +58,21 @@ public class EmployeeController {
         return ResponseEntity.ok().body(employee);
     }
 
-    @DeleteMapping(value="/delete")
+    @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@RequestParam String id) {
         //TODO: process PUT request
         dao.delete(Long.parseLong(id));
         return ResponseEntity.ok().body(null);
     }
 
-    @GetMapping("/list")
+    @RequestMapping(method = RequestMethod.GET,path = "/list")
     public ResponseEntity<Page<Employee>> list(@RequestParam int page,@RequestParam int size,
        @RequestParam(name = "sort",required = false) Optional<String> sort,
        @RequestParam(name = "filter",required = false) Optional<String> filter) throws JsonMappingException, JsonProcessingException {
         return ResponseEntity.ok().body(dao.getList(page, size, sort,filter));
     }
 
-    @GetMapping(value="/get")
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<EmployeeDto> get(@RequestParam Long id) {
         Employee employee = dao.getOne(id);
         EmployeeDto employeeDto = new EmployeeDto();

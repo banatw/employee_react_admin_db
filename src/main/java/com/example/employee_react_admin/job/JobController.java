@@ -13,17 +13,12 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
 
 
 
 @RestController
-@RequestMapping(path = "/api/job",method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE},
-produces = "application/json")
+@RequestMapping(path = "/job",produces = "application/json")
 @CrossOrigin(allowedHeaders = "*")
 public class JobController {
     private final JobDao dao;
@@ -32,13 +27,13 @@ public class JobController {
         this.dao = jobDao;
     }
 
-    @PostMapping(value="")
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Job> create(@RequestBody Job job) {
         dao.insert(job);
         return ResponseEntity.ok().body(job);
     }
 
-    @PutMapping(value="/update")
+    @RequestMapping(method = RequestMethod.PATCH)
     public ResponseEntity<Job> update(@RequestParam String id, @RequestBody Job jobNew) {
         //TODO: process PUT request
         Job job =  dao.getOne(Long.parseLong(id));
@@ -47,21 +42,21 @@ public class JobController {
         return ResponseEntity.ok().body(job);
     }
 
-    @DeleteMapping(value="/delete")
+    @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@RequestParam String id) {
         //TODO: process PUT request
         dao.delete(Long.parseLong(id));
         return ResponseEntity.ok().body(null);
     }
 
-    @GetMapping("/list")
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Page<Job>> list(@RequestParam int page,@RequestParam int size,
        @RequestParam(name = "sort",required = false) Optional<String> sort,
        @RequestParam(name = "filter",required = false) Optional<String> filter) throws JsonMappingException, JsonProcessingException {
         return ResponseEntity.ok().body(dao.getList(page, size, sort,filter));
     }
 
-    @GetMapping(value="/get")
+    @RequestMapping(method = RequestMethod.GET,path = "/get")
     public ResponseEntity<Job> get(@RequestParam Long id) {
         return ResponseEntity.ok().body(dao.getOne(id));
     }
