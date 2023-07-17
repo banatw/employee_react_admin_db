@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping(path = "/employee",produces = "application/json")
 @CrossOrigin(allowedHeaders = "*")
 public class EmployeeController {
-    // @Autowired
-    // private EmployeeDao dao;
 
     private final EmployeeDao dao;
     private final JobDao jobDao;
@@ -39,8 +37,6 @@ public class EmployeeController {
         Employee employee = new Employee();
         employee.setName(empString.getName());
         employee.setAddress(empString.getAddress());
-        Job job = jobDao.getOne(empString.getJob());
-        employee.setJob(job);
         dao.insert(employee);
         return ResponseEntity.ok().body(employee);
     }
@@ -52,8 +48,6 @@ public class EmployeeController {
         Employee employee =  dao.getOne(Long.parseLong(id));
         employee.setAddress(empString.getAddress());
         employee.setName(empString.getName());
-        Job job = jobDao.getOne(empString.getJob());
-        employee.setJob(job);
         dao.update(employee);
         return ResponseEntity.ok().body(employee);
     }
@@ -65,21 +59,20 @@ public class EmployeeController {
         return ResponseEntity.ok().body(null);
     }
 
-    @RequestMapping(method = RequestMethod.GET,path = "/list")
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Page<Employee>> list(@RequestParam int page,@RequestParam int size,
        @RequestParam(name = "sort",required = false) Optional<String> sort,
        @RequestParam(name = "filter",required = false) Optional<String> filter) throws JsonMappingException, JsonProcessingException {
         return ResponseEntity.ok().body(dao.getList(page, size, sort,filter));
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET,path = "/get")
     public ResponseEntity<EmployeeDto> get(@RequestParam Long id) {
         Employee employee = dao.getOne(id);
         EmployeeDto employeeDto = new EmployeeDto();
         employeeDto.setId(employee.getId());
         employeeDto.setAddress(employee.getAddress());
         employeeDto.setName(employee.getName());
-        employeeDto.setJob(employee.getJob().getId());
         return ResponseEntity.ok().body(employeeDto);
     }
 

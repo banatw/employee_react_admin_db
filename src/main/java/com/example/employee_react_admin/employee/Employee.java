@@ -19,12 +19,6 @@ public class Employee {
     private Long id;
     private String name;
     private String address;
-    @OneToOne
-    @JoinColumn(
-        name = "job_id",
-        referencedColumnName = "id"
-    )
-    @JsonBackReference
-    private Job job;
+    // private String job;
 
 }
